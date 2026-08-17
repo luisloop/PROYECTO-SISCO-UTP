@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111111">
+  <title>Panel de Monitoreo Académico</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header"><h1>📊 Panel de Monitoreo Diario — Coordinación Académica</h1><p class="header-date-time"><time id="datetime" aria-live="polite"></time></p></header>
+  <div class="app-layout">
+    <nav class="sidebar" aria-label="Menú principal">
+      <button class="nav-link active" type="button" data-view="dashboard">🏠 Inicio</button>
+      <button class="nav-link" type="button" data-view="plan">📋 Plan de trabajo</button>
+      <button class="nav-link" type="button" data-view="notes">📝 Notas y pendientes</button>
+      <button class="nav-link" type="button" data-view="teachers">👥 Docentes</button>
+      <button class="nav-link" type="button" data-view="communications">💬 Comunicaciones</button>
+      <button class="nav-link" type="button" data-view="systems">🖥️ Sistemas externos</button>
+    </nav>
+
+    <main class="content-area">
+      <section class="view" id="dashboard-view" data-view-panel="dashboard" aria-labelledby="dashboard-heading">
+        <h2 id="dashboard-heading">📊 Dashboard</h2>
+        <p class="view-intro">Resumen de tus actividades y accesos principales.</p>
+
+        <div class="dashboard-toolbar">
+          <div class="form-field compact-field">
+            <label for="dashboard-search">Buscar</label>
+            <input id="dashboard-search" type="search" placeholder="Notas, docentes o actividades..." autocomplete="off">
+          </div>
+          <div class="form-field compact-field">
+            <label for="dashboard-priority-filter">Prioridad</label>
+            <select id="dashboard-priority-filter">
+              <option value="">Todas</option>
+              <option value="alta">Alta</option>
+              <option value="media">Media</option>
+              <option value="baja">Baja</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="dashboard-summary">
+          <article><strong id="dashboard-total">0</strong><span>Actividades</span></article>
+          <article><strong id="dashboard-pending">0</strong><span>Pendientes</span></article>
+          <article><strong id="dashboard-overdue">0</strong><span>Vencidas</span></article>
+          <article><strong id="dashboard-completion">0%</strong><span>Avance general</span></article>
+        </div>
+        <div class="dashboard-grid">
+          <section class="dashboard-panel" aria-labelledby="recent-notes-heading">
+            <div class="section-heading"><h3 id="recent-notes-heading">📝 Últimos pendientes</h3><button class="text-button" type="button" data-view="notes">Ver todos</button></div>
+            <ul class="dashboard-notes" id="dashboard-notes-list"></ul>
+            <p class="empty-teachers" id="dashboard-empty-notes">Aún no tienes notas ni pendientes.</p>
+          </section>
+          <section class="dashboard-panel" aria-labelledby="quick-links-heading">
+            <h3 id="quick-links-heading">⚡ Accesos rápidos</h3>
+            <div class="quick-links">
+              <button type="button" data-view="plan">Gestionar plan</button>
+              <button type="button" data-view="teachers">Gestionar docentes</button>
+              <button type="button" data-view="systems">Abrir sistemas</button>
+            </div>
+          </section>
+        </div>
+
+        <div class="dashboard-grid secondary-grid">
+          <section class="dashboard-panel" aria-labelledby="daily-summary-heading">
+            <h3 id="daily-summary-heading">📌 Resumen del día</h3>
+            <ul class="summary-list" id="dashboard-summary-list"></ul>
+          </section>
+          <section class="dashboard-panel" aria-labelledby="urgent-heading">
+            <div class="section-heading"><h3 id="urgent-heading">🚨 Tareas urgentes</h3><button class="text-button" type="button" data-view="plan">Ver plan</button></div>
+            <ul class="urgent-list" id="urgent-tasks-list"></ul>
+            <p class="empty-teachers" id="urgent-empty">No hay tareas urgentes en este momento.</p>
+          </section>
+        </div>
+
+        <div class="dashboard-grid secondary-grid">
+          <section class="dashboard-panel" aria-labelledby="calendar-heading">
+            <div class="section-heading"><h3 id="calendar-heading">📅 Calendario</h3><div class="calendar-nav"><button type="button" class="calendar-button" id="calendar-prev" aria-label="Mes anterior">◀</button><span id="calendar-month-label"></span><button type="button" class="calendar-button" id="calendar-next" aria-label="Mes siguiente">▶</button></div></div>
+            <div class="calendar-grid" id="dashboard-calendar" aria-live="polite"></div>
+          </section>
+          <section class="dashboard-panel" aria-labelledby="alerts-heading">
+            <h3 id="alerts-heading">🔔 Alertas rápidas</h3>
+            <ul class="summary-list" id="dashboard-alerts-list"></ul>
+          </section>
+        </div>
+      </section>
+
+      <section class="view" id="notes-view" data-view-panel="notes" aria-labelledby="notes-heading" hidden>
+        <section class="notes-section" aria-labelledby="notes-heading">
+          <div class="section-heading"><div><h2 id="notes-heading">📝 Notas y pendientes</h2><p>Guarda recordatorios para consultarlos cuando los necesites.</p></div></div>
+          <form class="note-form" id="note-form"><label for="note-text">Nuevo pendiente o apunte</label><textarea id="note-text" required maxlength="500" placeholder="Ej.: Revisar la carga de exámenes del curso…"></textarea><button class="primary-button" type="submit">Guardar nota</button></form>
+          <p class="form-status" id="note-status" role="status" aria-live="polite"></p>
+          <ul class="notes-list" id="notes-list"></ul><p class="empty-teachers" id="empty-notes">Aún no tienes notas ni pendientes.</p>
+        </section>
+      </section>
+
+      <section class="view" id="plan-view" data-view-panel="plan" aria-labelledby="plan-heading" hidden>
+        <section class="plan-section" aria-labelledby="plan-heading">
+          <div class="section-heading"><div><h2 id="plan-heading">📋 Plan de trabajo</h2><p>Registra actividades y monitorea el avance de tus objetivos.</p></div></div>
+          <div class="plan-summary" aria-label="Resumen del plan de trabajo"><article><strong id="plan-total">0</strong><span>Total</span></article><article><strong id="plan-pending">0</strong><span>Pendientes</span></article><article><strong id="plan-progress">0</strong><span>En proceso</span></article><article><strong id="plan-completed">0</strong><span>Completadas</span></article><article><strong id="plan-overdue">0</strong><span>Vencidas</span></article></div>
+          <div class="progress-area"><label for="plan-completion-progress">Avance general: <span id="plan-completion-label">0%</span></label><progress id="plan-completion-progress" value="0" max="100">0%</progress></div>
+          <form class="plan-form" id="plan-form"><input type="hidden" id="editing-plan-id"><div class="form-field plan-task-field"><label for="plan-task">Actividad</label><input id="plan-task" required maxlength="180" autocomplete="off" placeholder="Ej.: Consolidar informe semanal"></div><div class="form-field"><label for="plan-responsible">Responsable</label><input id="plan-responsible" required maxlength="100" autocomplete="name" placeholder="Nombre del responsable"></div><div class="form-field"><label for="plan-due-date">Fecha límite</label><input id="plan-due-date" type="date" required></div><div class="form-field"><label for="plan-priority">Prioridad</label><select id="plan-priority"><option value="media">Media</option><option value="alta">Alta</option><option value="baja">Baja</option></select></div><div class="form-field"><label for="plan-status">Estado</label><select id="plan-status"><option value="pendiente">Pendiente</option><option value="en-proceso">En proceso</option><option value="completado">Completado</option><option value="bloqueado">Bloqueado</option></select></div><div class="form-field plan-observations-field"><label for="plan-observations">Observaciones <span>(opcional)</span></label><textarea id="plan-observations" maxlength="500" placeholder="Notas, dependencias o siguiente paso…"></textarea></div><div class="form-actions"><button class="primary-button" id="save-plan-item" type="submit">Agregar actividad</button><button class="secondary-button" id="cancel-plan-edit" type="button" hidden>Cancelar edición</button></div></form>
+          <p class="form-status" id="plan-status-message" role="status" aria-live="polite"></p>
+          <div class="plan-filters" aria-label="Filtros del plan de trabajo"><div class="form-field"><label for="plan-status-filter">Estado</label><select id="plan-status-filter"><option value="">Todos</option><option value="pendiente">Pendiente</option><option value="en-proceso">En proceso</option><option value="completado">Completado</option><option value="bloqueado">Bloqueado</option></select></div><div class="form-field"><label for="plan-priority-filter">Prioridad</label><select id="plan-priority-filter"><option value="">Todas</option><option value="alta">Alta</option><option value="media">Media</option><option value="baja">Baja</option></select></div><div class="form-field"><label for="plan-responsible-filter">Responsable</label><select id="plan-responsible-filter"><option value="">Todos</option></select></div><label class="checkbox-label"><input id="plan-overdue-filter" type="checkbox"> Solo vencidas</label></div>
+          <div class="table-wrapper" tabindex="0"><table><caption>Actividades registradas</caption><thead><tr><th scope="col">Actividad</th><th scope="col">Responsable</th><th scope="col">Fecha límite</th><th scope="col">Prioridad</th><th scope="col">Estado</th><th scope="col">Acciones</th></tr></thead><tbody id="plan-table-body"></tbody></table></div><p class="empty-teachers" id="empty-plan">Aún no hay actividades en el plan de trabajo.</p>
+        </section>
+      </section>
+
+      <section class="view" id="teachers-view" data-view-panel="teachers" aria-labelledby="teachers-heading" hidden>
+        <section class="teachers-section" id="teachers-section" aria-labelledby="teachers-heading">
+          <div class="section-heading"><div><h2 id="teachers-heading">👥 Gestión de docentes</h2><p>Registra y administra la información principal de los docentes.</p></div></div>
+          <form class="teacher-form" id="teacher-form"><input type="hidden" id="editing-teacher-code"><div class="form-field teacher-search-field"><label for="teacher-filter">Buscar por nombres o apellidos</label><input id="teacher-filter" type="search" placeholder="Ej.: Luis, Pérez o Huamán" autocomplete="off"></div><div class="form-field"><label for="teacher-code">Código de docente</label><input id="teacher-code" name="code" type="text" required maxlength="30" autocomplete="off"></div><div class="form-field"><label for="teacher-first-names">Nombres completos</label><input id="teacher-first-names" name="firstNames" type="text" required maxlength="100" autocomplete="given-name"></div><div class="form-field"><label for="teacher-last-names">Apellidos completos</label><input id="teacher-last-names" name="lastNames" type="text" required maxlength="100" autocomplete="family-name"></div><div class="form-field"><label for="teacher-status">Estado</label><select id="teacher-status"><option value="activo">Activo</option><option value="inactivo">Inactivo</option></select></div><div class="form-actions"><button class="primary-button" id="save-teacher" type="submit">Agregar docente</button><button class="secondary-button" id="cancel-edit" type="button" hidden>Cancelar edición</button></div></form>
+          <p class="form-status" id="form-status" role="status" aria-live="polite"></p><div class="table-wrapper" tabindex="0"><table><caption>Docentes registrados</caption><thead><tr><th scope="col">Código</th><th scope="col">Nombres</th><th scope="col">Apellidos</th><th scope="col">Acciones</th></tr></thead><tbody id="teachers-table-body"></tbody></table></div><p class="empty-teachers" id="empty-teachers">Aún no hay docentes registrados.</p>
+        </section>
+      </section>
+
+      <section class="view" id="communications-view" data-view-panel="communications" aria-labelledby="communications-heading" hidden>
+        <section class="communications-section" aria-labelledby="communications-heading">
+          <div class="section-heading"><div><h2 id="communications-heading">💬 Comunicaciones WhatsApp</h2><p>Accesos rápidos a los grupos de docentes.</p></div></div>
+          <div class="communications-grid">
+            <article class="communication-card"><h3>Grupo general</h3><p>Comunicados dirigidos a todos los docentes.</p><a class="system-link" href="https://chat.whatsapp.com/GV3VfJkPSfnIOaSnlkfbu4" target="_blank" rel="noopener noreferrer">Abrir grupo</a></article>
+            <article class="communication-card"><h3>Docentes a tiempo completo</h3><p>Comunicados exclusivos para docentes TC.</p><button class="system-link" type="button" disabled>Enlace pendiente</button></article>
+          </div>
+        </section>
+      </section>
+
+      <section class="view" id="systems-view" data-view-panel="systems" aria-labelledby="systems-heading" hidden><section class="options-section" aria-labelledby="systems-heading"><h2 id="systems-heading">Sistemas externos</h2><p class="view-intro">Accesos a las plataformas académicas y administrativas.</p><div class="systems-grid" id="systems" role="list"></div></section></section>
+      <p class="footer-note">Los sistemas se abrirán en una nueva pestaña para preservar la autenticación y evitar bloqueos de contenido integrado.</p>
+    </main>
+  </div>
+  <footer class="page-footer">
+    <p class="footer-credit">Hecho por Impulsa TI</p>
+  </footer>
+  <script src="app.js" defer></script>
+</body>
+</html>
