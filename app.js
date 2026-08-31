@@ -1,16 +1,86 @@
+const loginScreen = document.getElementById('login-screen');
+const appShell = document.getElementById('app-shell');
+const loginForm = document.getElementById('login-form');
+const loginEmail = document.getElementById('login-email');
+const loginPassword = document.getElementById('login-password');
+const loginError = document.getElementById('login-error');
+const rememberSession = document.getElementById('remember-session');
+const togglePassword = document.getElementById('toggle-password');
+const logoutButton = document.getElementById('logout-button');
+const authStorageKey = 'sisco-authenticated';
+const validUser = { email: 'lloop@utp.edu.pe', password: 'SiscoDemo2026#' };
+
+function hasActiveSession() {
+  return sessionStorage.getItem(authStorageKey) === 'true' || localStorage.getItem(authStorageKey) === 'true';
+}
+
+function setAuthenticated(isAuthenticated) {
+  loginScreen.hidden = isAuthenticated;
+  appShell.hidden = !isAuthenticated;
+  document.body.classList.toggle('is-authenticated', isAuthenticated);
+  if (isAuthenticated) {
+    showView('dashboard');
+  } else {
+    loginForm.reset();
+    loginPassword.type = 'password';
+    togglePassword.textContent = 'Mostrar';
+    togglePassword.setAttribute('aria-pressed', 'false');
+    loginError.textContent = '';
+    window.setTimeout(() => loginEmail.focus(), 0);
+  }
+}
+
+loginForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+  const email = loginEmail.value.trim().toLocaleLowerCase('es-PE');
+  const password = loginPassword.value;
+  if (!email || !password) {
+    loginError.textContent = 'Completa el correo y la contraseña.';
+    (!email ? loginEmail : loginPassword).focus();
+    return;
+  }
+  if (email !== validUser.email || password !== validUser.password) {
+    loginError.textContent = 'El correo o la contraseña no son correctos.';
+    loginPassword.select();
+    return;
+  }
+  localStorage.removeItem(authStorageKey);
+  sessionStorage.removeItem(authStorageKey);
+  (rememberSession.checked ? localStorage : sessionStorage).setItem(authStorageKey, 'true');
+  setAuthenticated(true);
+});
+
+togglePassword.addEventListener('click', () => {
+  const reveal = loginPassword.type === 'password';
+  loginPassword.type = reveal ? 'text' : 'password';
+  togglePassword.textContent = reveal ? 'Ocultar' : 'Mostrar';
+  togglePassword.setAttribute('aria-pressed', String(reveal));
+  togglePassword.setAttribute('aria-label', reveal ? 'Ocultar contraseña' : 'Mostrar contraseña');
+});
+
+logoutButton.addEventListener('click', () => {
+  localStorage.removeItem(authStorageKey);
+  sessionStorage.removeItem(authStorageKey);
+  setAuthenticated(false);
+});
+
 const systems = [
-  { name: 'Foros', description: 'Monitoreo diario de participación', url: 'https://app.powerbi.com/reportEmbed?reportId=5c91ce8f-271e-4f97-bebd-de4c1c80d583&groupId=me&ctid=c4a66c34-2bb7-451f-8be1-b2c26a430158&autoAuth=true&filterPaneEnabled=false&navContentPaneEnabled=false' },
+  { name: 'Foros', description: 'Monitoreo diario de participación', url: 'https://app.powerbi.com/links/kYVjQGadfO?ctid=c4a66c34-2bb7-451f-8be1-b2c26a430158&pbi_source=linkShare&bookmarkGuid=a6d90115-d70e-4cda-b33f-e98b4d0b9582' },
   { name: 'Notas', description: 'Revisión de registros académicos', url: 'https://app.powerbi.com/reportEmbed?reportId=60a6d388-4383-463d-991f-aa392628a9a5&groupId=me&ctid=c4a66c34-2bb7-451f-8be1-b2c26a430158&autoAuth=true&filterPaneEnabled=false&navContentPaneEnabled=false' },
   { name: 'Tickets de Atención', description: 'Soporte e incidencias', url: 'https://utp.crm2.dynamics.com/main.aspx?appid=5a09611e-051d-e911-a94e-000d3a754329&forceUCI=1&pagetype=entitylist&etn=incident&viewid=00000000-0000-0000-00aa-000010001028&viewType=1039' },
-  { name: 'UTP+Class', description: 'Plataforma de clases virtuales', url: 'https://utp-class.com' },
-  { name: 'Portal Docente', description: 'Gestión académica docente', url: 'https://portaldocente.utp.edu.pe/' },
+  { name: 'UTP+Class', description: 'Plataforma de clases virtuales', url: 'https://class.utp.edu.pe/' },
+  { name: 'Portal Coordinador', description: 'Gestión académica para el rol de coordinación', url: 'https://portaldocente.utp.edu.pe/' },
+  { name: 'Portal Docente', description: 'Gestión de clases y actividades en el rol docente', url: 'https://docente.utp.edu.pe/' },
   { name: 'PeopleSoft', description: 'Gestión administrativa', url: 'https://peoplesoft.com' },
   { name: 'Horacio', description: 'Gestión de horarios', url: 'https://horario-sistema.com' },
   { name: 'ChatGPT', description: 'Asistencia inteligente', url: 'https://chatgpt.com/' },
   { name: 'Docentes', description: 'Registrar, editar o eliminar docentes', action: 'manage-teachers' },
   { name: 'Sustentaciones', description: 'Programación y seguimiento de sustentaciones', unavailable: true },
-  { name: 'EVA', description: 'Carga de exámenes en el sistema EVA', unavailable: true },
-  { name: 'Docente Apto - Assessment', description: 'Consulta y seguimiento de docentes aptos', unavailable: true }
+  { name: 'EVA', description: 'Carga de exámenes en el sistema EVA', url: 'https://eva.utp.edu.pe/index.php/admin/login' },
+  { name: 'Sílabos de cursos', description: 'Consulta de sílabos de todos los cursos', url: 'https://utpedupe-my.sharepoint.com/:x:/g/personal/lloop_utp_edu_pe/IQAADdACT5r5Qqy74b0EWSZBAZAwB88XAiVMC939AaBuAec?e=qytkaD' },
+  { name: 'Convalidaciones', description: 'Gestión de solicitudes y documentos para convalidación', url: 'https://utpedupe-my.sharepoint.com/:f:/g/personal/lloop_utp_edu_pe/IgCjo88yMWnxRYvmZVCEYkxgARtHyVgourzUx-lnJfYOUbg?e=Kh4tjb' },
+  { name: 'Metodología de enseñanza', description: 'Reporte de seguimiento de metodología de enseñanza', url: 'https://app.powerbi.com/links/HjCzIlHeAo?ctid=c4a66c34-2bb7-451f-8be1-b2c26a430158&pbi_source=linkShare&bookmarkGuid=2e8540f4-7e49-43a4-9f08-672b7602778b' },
+  { name: 'Docente Apto - Assessment', description: 'Consulta y seguimiento de docentes aptos', url: 'https://app.powerbi.com/links/qMISobkftX?ctid=c4a66c34-2bb7-451f-8be1-b2c26a430158&pbi_source=linkShare&bookmarkGuid=4f6b8fb1-c404-475b-aae4-b0570d6b8b9c' }
 ];
 
 const initialTeachers = [
@@ -52,6 +122,8 @@ const initialTeachers = [
 ];
 
 const systemsContainer = document.getElementById('systems');
+const reportsContainer = document.getElementById('reports');
+const academicDocumentsContainer = document.getElementById('academic-documents');
 const dateTime = document.getElementById('datetime');
 const viewPanels = document.querySelectorAll('[data-view-panel]');
 const navigationLinks = document.querySelectorAll('.nav-link');
@@ -60,6 +132,7 @@ const teacherForm = document.getElementById('teacher-form');
 const teacherCode = document.getElementById('teacher-code');
 const teacherFirstNames = document.getElementById('teacher-first-names');
 const teacherLastNames = document.getElementById('teacher-last-names');
+const teacherPhone = document.getElementById('teacher-phone');
 const teacherStatus = document.getElementById('teacher-status');
 const teacherFilter = document.getElementById('teacher-filter');
 const editingTeacherCode = document.getElementById('editing-teacher-code');
@@ -68,11 +141,20 @@ const cancelEdit = document.getElementById('cancel-edit');
 const formStatus = document.getElementById('form-status');
 const teachersTableBody = document.getElementById('teachers-table-body');
 const emptyTeachers = document.getElementById('empty-teachers');
+const scheduleDialog = document.getElementById('schedule-dialog');
+const scheduleTitle = document.getElementById('schedule-title');
+const scheduleTeacherCode = document.getElementById('schedule-teacher-code');
+const closeScheduleButton = document.getElementById('close-schedule');
+const closeScheduleFooterButton = document.getElementById('close-schedule-footer');
 const teachersStorageKey = 'academic-monitoring-teachers';
 const teachersSeededKey = 'academic-monitoring-teachers-seeded';
 let teachers = initializeTeachers();
 const noteForm = document.getElementById('note-form');
 const noteText = document.getElementById('note-text');
+const editingNoteId = document.getElementById('editing-note-id');
+const noteUrgent = document.getElementById('note-urgent');
+const saveNoteButton = document.getElementById('save-note');
+const cancelNoteEdit = document.getElementById('cancel-note-edit');
 const noteStatus = document.getElementById('note-status');
 const notesList = document.getElementById('notes-list');
 const emptyNotes = document.getElementById('empty-notes');
@@ -80,6 +162,7 @@ const notesStorageKey = 'academic-monitoring-notes';
 let notes = loadNotes();
 const planForm = document.getElementById('plan-form');
 const editingPlanId = document.getElementById('editing-plan-id');
+const planAxis = document.getElementById('plan-axis');
 const planTask = document.getElementById('plan-task');
 const planResponsible = document.getElementById('plan-responsible');
 const planDueDate = document.getElementById('plan-due-date');
@@ -91,6 +174,7 @@ const cancelPlanEdit = document.getElementById('cancel-plan-edit');
 const planStatusMessage = document.getElementById('plan-status-message');
 const planTableBody = document.getElementById('plan-table-body');
 const emptyPlan = document.getElementById('empty-plan');
+const planAxisFilter = document.getElementById('plan-axis-filter');
 const planStatusFilter = document.getElementById('plan-status-filter');
 const planPriorityFilter = document.getElementById('plan-priority-filter');
 const planResponsibleFilter = document.getElementById('plan-responsible-filter');
@@ -98,6 +182,8 @@ const planOverdueFilter = document.getElementById('plan-overdue-filter');
 const planStorageKey = 'academic-monitoring-work-plan';
 let planItems = loadPlanItems();
 const dashboardNotesList = document.getElementById('dashboard-notes-list');
+const dashboardGreeting = document.getElementById('dashboard-greeting');
+const dashboardToday = document.getElementById('dashboard-today');
 const dashboardEmptyNotes = document.getElementById('dashboard-empty-notes');
 const dashboardSearchInput = document.getElementById('dashboard-search');
 const dashboardPriorityFilter = document.getElementById('dashboard-priority-filter');
@@ -148,8 +234,14 @@ function createSystemCard(system) {
   return card;
 }
 
-const cards = systems.map(createSystemCard);
-systemsContainer.append(...cards);
+const reportNames = new Set(['Foros', 'Notas', 'Metodología de enseñanza', 'Docente Apto - Assessment']);
+const documentNames = new Set(['Sílabos de cursos', 'Convalidaciones']);
+const reportCards = systems.filter((system) => reportNames.has(system.name)).map(createSystemCard);
+const documentCards = systems.filter((system) => documentNames.has(system.name)).map(createSystemCard);
+const platformCards = systems.filter((system) => !reportNames.has(system.name) && !documentNames.has(system.name)).map(createSystemCard);
+reportsContainer.append(...reportCards);
+academicDocumentsContainer.append(...documentCards);
+systemsContainer.append(...platformCards);
 
 function updateDateTime() {
   const now = new Date();
@@ -160,6 +252,9 @@ function updateDateTime() {
 
   dateTime.dateTime = now.toISOString();
   dateTime.textContent = formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1);
+  const hour = now.getHours();
+  dashboardGreeting.textContent = hour < 12 ? 'Buenos días' : hour < 19 ? 'Buenas tardes' : 'Buenas noches';
+  dashboardToday.textContent = new Intl.DateTimeFormat('es-PE', { weekday: 'long', day: 'numeric', month: 'long' }).format(now);
 }
 
 function loadTeachers() {
@@ -174,8 +269,14 @@ function loadTeachers() {
 function normalizeTeacherStatus(teacher) {
   return {
     ...teacher,
+    phone: teacher.phone || '',
     active: teacher.active !== false
   };
+}
+
+function formatWhatsAppNumber(phone) {
+  const digits = String(phone).replace(/\D/g, '');
+  return digits.length === 9 ? `51${digits}` : digits;
 }
 
 function initializeTeachers() {
@@ -237,6 +338,10 @@ function labelForPriority(priority) {
   return ({ alta: 'Alta', media: 'Media', baja: 'Baja' })[priority];
 }
 
+function labelForAxis(axis) {
+  return ({ acompanamiento: 'Acompañamiento docente', rsu: 'Responsabilidad Social', fortalecimiento: 'Fortalecimiento académico', indicadores: 'Indicadores académicos' })[axis] || 'Sin eje asignado';
+}
+
 function resetPlanForm() {
   planForm.reset();
   editingPlanId.value = '';
@@ -285,7 +390,9 @@ function renderPlanSummary() {
 
 function getFilteredPlanItems() {
   return planItems.filter((item) => {
-    return (!planStatusFilter.value || item.status === planStatusFilter.value)
+    const itemAxis = item.axis || 'sin-eje';
+    return (!planAxisFilter.value || itemAxis === planAxisFilter.value)
+      && (!planStatusFilter.value || item.status === planStatusFilter.value)
       && (!planPriorityFilter.value || item.priority === planPriorityFilter.value)
       && (!planResponsibleFilter.value || item.responsible === planResponsibleFilter.value)
       && (!planOverdueFilter.checked || isOverdue(item));
@@ -306,6 +413,11 @@ function renderPlan() {
 
   visibleItems.forEach((item) => {
     const row = document.createElement('tr');
+    const axisCell = document.createElement('td');
+    const axisPill = document.createElement('span');
+    axisPill.className = `axis-pill axis-${item.axis || 'unassigned'}`;
+    axisPill.textContent = labelForAxis(item.axis);
+    axisCell.append(axisPill);
     const taskCell = document.createElement('td');
     taskCell.className = 'plan-task-cell';
     const taskName = document.createElement('strong');
@@ -352,13 +464,14 @@ function renderPlan() {
     deleteButton.textContent = 'Eliminar';
     deleteButton.addEventListener('click', () => deletePlanItem(item.id));
     actionsCell.append(editButton, deleteButton);
-    row.append(taskCell, responsibleCell, dueDateCell, priorityCell, statusCell, actionsCell);
+    row.append(axisCell, taskCell, responsibleCell, dueDateCell, priorityCell, statusCell, actionsCell);
     planTableBody.append(row);
   });
 }
 
 function startPlanEdit(item) {
   editingPlanId.value = item.id;
+  planAxis.value = item.axis || '';
   planTask.value = item.task;
   planResponsible.value = item.responsible;
   planDueDate.value = item.dueDate;
@@ -410,31 +523,74 @@ function renderTeachers() {
   teachersTableBody.replaceChildren();
   const query = normalizeSearchText(teacherFilter.value.trim());
   const filteredTeachers = teachers.filter((teacher) => {
-    const searchableText = normalizeSearchText(`${teacher.firstNames} ${teacher.lastNames}`);
+    const searchableText = normalizeSearchText(`${teacher.firstNames} ${teacher.lastNames} ${teacher.phone || ''}`);
     return searchableText.includes(query);
+  }).sort((first, second) => {
+    const statusDifference = Number(first.active === false) - Number(second.active === false);
+    if (statusDifference !== 0) return statusDifference;
+    return `${first.lastNames} ${first.firstNames}`.localeCompare(`${second.lastNames} ${second.firstNames}`, 'es');
   });
   emptyTeachers.hidden = filteredTeachers.length > 0;
   emptyTeachers.textContent = teachers.length === 0
     ? 'Aún no hay docentes registrados.'
-    : 'No se encontraron docentes con ese nombre o apellido.';
+    : 'No se encontraron docentes con ese nombre, apellido o teléfono.';
+
+  const groupCounts = {
+    active: filteredTeachers.filter((teacher) => teacher.active !== false).length,
+    inactive: filteredTeachers.filter((teacher) => teacher.active === false).length
+  };
+  let currentGroup = '';
 
   filteredTeachers.forEach((teacher) => {
+    const teacherGroup = teacher.active === false ? 'inactive' : 'active';
+    if (teacherGroup !== currentGroup) {
+      currentGroup = teacherGroup;
+      const groupRow = document.createElement('tr');
+      groupRow.className = `teacher-group-row ${teacherGroup}`;
+      const groupCell = document.createElement('th');
+      groupCell.colSpan = 6;
+      groupCell.scope = 'rowgroup';
+      groupCell.textContent = teacherGroup === 'active'
+        ? `Docentes activos (${groupCounts.active})`
+        : `Docentes inactivos (${groupCounts.inactive})`;
+      groupRow.append(groupCell);
+      teachersTableBody.append(groupRow);
+    }
     const row = document.createElement('tr');
+    row.className = `teacher-row ${teacherGroup}`;
     const codeCell = document.createElement('td');
     codeCell.textContent = teacher.code;
     const firstNamesCell = document.createElement('td');
     firstNamesCell.textContent = teacher.firstNames;
     const lastNamesCell = document.createElement('td');
     lastNamesCell.textContent = teacher.lastNames;
+    const phoneCell = document.createElement('td');
+    phoneCell.textContent = teacher.phone || 'Sin registrar';
+    if (!teacher.phone) phoneCell.className = 'muted-cell';
     const statusCell = document.createElement('td');
     const statusBadge = document.createElement('span');
     statusBadge.className = `teacher-status-badge ${teacher.active === false ? 'inactive' : 'active'}`;
     statusBadge.textContent = teacher.active === false ? 'Inactivo' : 'Activo';
     statusCell.append(statusBadge);
-    row.append(codeCell, firstNamesCell, lastNamesCell, statusCell);
+    row.append(codeCell, firstNamesCell, lastNamesCell, phoneCell, statusCell);
 
     const actionsCell = document.createElement('td');
     actionsCell.className = 'table-actions';
+    const scheduleButton = document.createElement('button');
+    scheduleButton.className = 'table-button schedule-button';
+    scheduleButton.type = 'button';
+    scheduleButton.textContent = 'Ver horario';
+    scheduleButton.addEventListener('click', () => showTeacherSchedule(teacher));
+    if (teacher.phone) {
+      const whatsappLink = document.createElement('a');
+      whatsappLink.className = 'table-button whatsapp-button';
+      whatsappLink.href = `https://wa.me/${formatWhatsAppNumber(teacher.phone)}`;
+      whatsappLink.target = '_blank';
+      whatsappLink.rel = 'noopener noreferrer';
+      whatsappLink.textContent = 'WhatsApp';
+      whatsappLink.setAttribute('aria-label', `Abrir WhatsApp de ${teacher.firstNames} ${teacher.lastNames}`);
+      actionsCell.append(whatsappLink);
+    }
     const editButton = document.createElement('button');
     editButton.className = 'table-button';
     editButton.type = 'button';
@@ -445,11 +601,27 @@ function renderTeachers() {
     deleteButton.type = 'button';
     deleteButton.textContent = 'Eliminar';
     deleteButton.addEventListener('click', () => deleteTeacher(teacher.code));
-    actionsCell.append(editButton, deleteButton);
+    actionsCell.append(scheduleButton, editButton, deleteButton);
     row.append(actionsCell);
     teachersTableBody.append(row);
   });
 }
+
+function showTeacherSchedule(teacher) {
+  scheduleTitle.textContent = `${teacher.firstNames} ${teacher.lastNames}`;
+  scheduleTeacherCode.textContent = `Código docente: ${teacher.code}`;
+  scheduleDialog.showModal();
+}
+
+function closeTeacherSchedule() {
+  scheduleDialog.close();
+}
+
+closeScheduleButton.addEventListener('click', closeTeacherSchedule);
+closeScheduleFooterButton.addEventListener('click', closeTeacherSchedule);
+scheduleDialog.addEventListener('click', (event) => {
+  if (event.target === scheduleDialog) closeTeacherSchedule();
+});
 
 function startEditTeacher(teacher) {
   editingTeacherCode.value = teacher.code;
@@ -457,6 +629,7 @@ function startEditTeacher(teacher) {
   teacherCode.disabled = true;
   teacherFirstNames.value = teacher.firstNames;
   teacherLastNames.value = teacher.lastNames;
+  teacherPhone.value = teacher.phone || '';
   teacherStatus.value = teacher.active === false ? 'inactivo' : 'activo';
   saveTeacher.textContent = 'Guardar cambios';
   cancelEdit.hidden = false;
@@ -519,7 +692,7 @@ function groupNotesByMonthAndDay(noteList) {
         .sort(([left], [right]) => right.localeCompare(left))
         .map(([, dayGroup]) => ({
           ...dayGroup,
-          notes: [...dayGroup.notes].sort((first, second) => new Date(second.createdAt) - new Date(first.createdAt))
+          notes: [...dayGroup.notes].sort((first, second) => Number(second.urgent) - Number(first.urgent) || new Date(second.createdAt) - new Date(first.createdAt))
         }))
     }));
 }
@@ -553,7 +726,7 @@ function renderNotes() {
 
       dayGroup.notes.forEach((note) => {
         const item = document.createElement('li');
-        item.className = `note-item${note.completed ? ' completed' : ''}`;
+        item.className = `note-item${note.completed ? ' completed' : ''}${note.urgent ? ' urgent' : ''}`;
 
         const checkbox = document.createElement('input');
         checkbox.className = 'note-checkbox';
@@ -568,11 +741,29 @@ function renderNotes() {
         const text = document.createElement('p');
         text.textContent = note.text;
 
+        const noteMeta = document.createElement('div');
+        noteMeta.className = 'note-meta';
+        if (note.urgent) {
+          const urgentBadge = document.createElement('span');
+          urgentBadge.className = 'note-urgent-badge';
+          urgentBadge.textContent = 'Urgente';
+          noteMeta.append(urgentBadge);
+        }
+
         const date = document.createElement('time');
         date.dateTime = note.createdAt;
         date.textContent = new Intl.DateTimeFormat('es-PE', { timeStyle: 'short' }).format(new Date(note.createdAt));
 
-        content.append(text, date);
+        noteMeta.append(date);
+        content.append(text, noteMeta);
+
+        const actions = document.createElement('div');
+        actions.className = 'note-actions';
+        const editButton = document.createElement('button');
+        editButton.className = 'table-button';
+        editButton.type = 'button';
+        editButton.textContent = 'Editar';
+        editButton.addEventListener('click', () => startEditNote(note));
 
         const deleteButton = document.createElement('button');
         deleteButton.className = 'table-button delete-button';
@@ -580,7 +771,8 @@ function renderNotes() {
         deleteButton.textContent = 'Eliminar';
         deleteButton.addEventListener('click', () => deleteNote(note.id));
 
-        item.append(checkbox, content, deleteButton);
+        actions.append(editButton, deleteButton);
+        item.append(checkbox, content, actions);
         dayList.append(item);
       });
 
@@ -608,12 +800,14 @@ function getUrgentTasks() {
 
 function renderDashboardNotes() {
   dashboardNotesList.replaceChildren();
-  const recentNotes = notes.slice(0, 5);
+  const recentNotes = [...notes]
+    .sort((first, second) => Number(second.urgent && !second.completed) - Number(first.urgent && !first.completed) || new Date(second.createdAt) - new Date(first.createdAt))
+    .slice(0, 5);
   dashboardEmptyNotes.hidden = recentNotes.length > 0;
   recentNotes.forEach((note) => {
     const item = document.createElement('li');
-    item.className = note.completed ? 'completed' : '';
-    item.textContent = note.text;
+    item.className = `${note.completed ? 'completed' : ''}${note.urgent ? ' urgent' : ''}`;
+    item.textContent = note.urgent ? `Urgente · ${note.text}` : note.text;
     dashboardNotesList.append(item);
   });
 }
@@ -902,9 +1096,27 @@ function toggleNote(id) {
   renderNotes();
 }
 
+function resetNoteForm() {
+  noteForm.reset();
+  editingNoteId.value = '';
+  saveNoteButton.textContent = 'Guardar nota';
+  cancelNoteEdit.hidden = true;
+}
+
+function startEditNote(note) {
+  editingNoteId.value = note.id;
+  noteText.value = note.text;
+  noteUrgent.checked = note.urgent === true;
+  saveNoteButton.textContent = 'Guardar cambios';
+  cancelNoteEdit.hidden = false;
+  noteStatus.textContent = 'Editando la nota seleccionada.';
+  noteText.focus();
+}
+
 function deleteNote(id) {
   if (!window.confirm('¿Eliminar esta nota?')) return;
   notes = notes.filter((note) => note.id !== id);
+  if (editingNoteId.value === id) resetNoteForm();
   saveNotes();
   renderNotes();
   noteStatus.textContent = 'Nota eliminada correctamente.';
@@ -915,6 +1127,7 @@ teacherForm.addEventListener('submit', (event) => {
   const code = teacherCode.value.trim();
   const firstNames = teacherFirstNames.value.trim();
   const lastNames = teacherLastNames.value.trim();
+  const phone = teacherPhone.value.trim();
   const status = teacherStatus.value;
   const originalCode = editingTeacherCode.value;
 
@@ -926,10 +1139,10 @@ teacherForm.addEventListener('submit', (event) => {
   }
 
   if (originalCode) {
-    teachers = teachers.map((teacher) => teacher.code === originalCode ? { code, firstNames, lastNames, active: status === 'activo' } : teacher);
+    teachers = teachers.map((teacher) => teacher.code === originalCode ? { code, firstNames, lastNames, phone, active: status === 'activo' } : teacher);
     setFormStatus('Datos del docente actualizados correctamente.');
   } else {
-    teachers.push({ code, firstNames, lastNames, active: status === 'activo' });
+    teachers.push({ code, firstNames, lastNames, phone, active: status === 'activo' });
     setFormStatus('Docente agregado correctamente.');
   }
 
@@ -947,23 +1160,31 @@ cancelEdit.addEventListener('click', () => {
 noteForm.addEventListener('submit', (event) => {
   event.preventDefault();
   const text = noteText.value.trim();
+  const urgent = noteUrgent.checked;
+  const noteId = editingNoteId.value;
   if (!text) return;
 
-  notes.unshift({
-    id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-    text,
-    completed: false,
-    createdAt: new Date().toISOString()
-  });
+  if (noteId) {
+    notes = notes.map((note) => note.id === noteId ? { ...note, text, urgent, updatedAt: new Date().toISOString() } : note);
+    noteStatus.textContent = 'Nota actualizada correctamente.';
+  } else {
+    notes.unshift({ id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`, text, urgent, completed: false, createdAt: new Date().toISOString() });
+    noteStatus.textContent = urgent ? 'Nota urgente guardada correctamente.' : 'Nota guardada correctamente.';
+  }
   saveNotes();
-  noteForm.reset();
+  resetNoteForm();
   renderNotes();
-  noteStatus.textContent = 'Nota guardada correctamente.';
   noteText.focus();
+});
+
+cancelNoteEdit.addEventListener('click', () => {
+  resetNoteForm();
+  noteStatus.textContent = 'Edición cancelada.';
 });
 
 planForm.addEventListener('submit', (event) => {
   event.preventDefault();
+  const axis = planAxis.value;
   const task = planTask.value.trim();
   const responsible = planResponsible.value.trim();
   const dueDate = planDueDate.value;
@@ -971,9 +1192,9 @@ planForm.addEventListener('submit', (event) => {
   const status = planStatus.value;
   const observations = planObservations.value.trim();
   const itemId = editingPlanId.value;
-  if (!task || !responsible || !dueDate) return;
+  if (!axis || !task || !responsible || !dueDate) return;
 
-  const planItem = { id: itemId || `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`, task, responsible, dueDate, priority, status, observations };
+  const planItem = { id: itemId || `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`, axis, task, responsible, dueDate, priority, status, observations };
   if (itemId) {
     planItems = planItems.map((item) => item.id === itemId ? planItem : item);
     planStatusMessage.textContent = 'Actividad actualizada correctamente.';
@@ -992,6 +1213,7 @@ cancelPlanEdit.addEventListener('click', () => {
   planStatusMessage.textContent = 'Edición cancelada.';
 });
 
+planAxisFilter.addEventListener('input', renderPlan);
 planStatusFilter.addEventListener('input', renderPlan);
 planPriorityFilter.addEventListener('input', renderPlan);
 planResponsibleFilter.addEventListener('input', renderPlan);
@@ -1027,3 +1249,4 @@ renderDashboardAlerts();
 renderDashboardCalendar();
 updateDateTime();
 window.setInterval(updateDateTime, 1000);
+setAuthenticated(hasActiveSession());

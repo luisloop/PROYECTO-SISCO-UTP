@@ -4,11 +4,31 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#111111">
-  <title>Panel de Monitoreo Académico</title>
+  <title>Coordinación Académica de Ingeniería de Sistemas | UTP Ica</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header class="site-header"><h1>📊 Panel de Monitoreo Diario — Coordinación Académica</h1><p class="header-date-time"><time id="datetime" aria-live="polite"></time></p></header>
+  <main class="login-screen" id="login-screen">
+    <section class="login-card" aria-labelledby="login-title">
+      <div class="login-brand" aria-hidden="true">UTP</div>
+      <p class="login-eyebrow">Universidad Tecnológica del Perú</p>
+      <h1 id="login-title">Bienvenido de nuevo</h1>
+      <p class="login-description">Ingresa tus credenciales institucionales para acceder al panel de la Coordinación Académica de Ingeniería de Sistemas.</p>
+      <form class="login-form" id="login-form" novalidate>
+        <div class="login-field"><label for="login-email">Correo institucional</label><input id="login-email" name="email" type="email" autocomplete="username" placeholder="nombre@sisco.pe" required></div>
+        <div class="login-field"><label for="login-password">Contraseña</label><div class="password-control"><input id="login-password" name="password" type="password" autocomplete="current-password" placeholder="Ingresa tu contraseña" required><button id="toggle-password" type="button" aria-label="Mostrar contraseña" aria-pressed="false">Mostrar</button></div></div>
+        <label class="remember-control"><input id="remember-session" type="checkbox"> Mantener mi sesión activa</label>
+        <p class="login-error" id="login-error" role="alert" aria-live="polite"></p>
+        <button class="login-button" type="submit">Ingresar al panel</button>
+      </form>
+      <div class="demo-access"><strong>Acceso institucional</strong><span>lloop@utp.edu.pe</span></div>
+      <p class="login-help">¿Problemas para ingresar? Contacta a soporte de Impulsa TI.</p>
+    </section>
+    <aside class="login-visual" aria-label="Coordinación Académica de Ingeniería de Sistemas"><div class="systems-emblem" aria-hidden="true"><span>&lt;/&gt;</span><small>UTP · CAMPUS ICA</small></div><div class="visual-content"><span>Ingeniería de Sistemas</span><h2>Coordinación Académica</h2><p>Gestiona actividades, docentes, comunicaciones y sistemas académicos de la carrera desde un solo lugar.</p><div class="career-tags" aria-label="Áreas de Ingeniería de Sistemas"><span>Innovación</span><span>Software</span><span>Datos</span></div></div></aside>
+  </main>
+
+  <div id="app-shell" hidden>
+  <header class="site-header"><div class="header-brand"><span class="header-logo" aria-hidden="true">UTP</span><div class="header-copy"><p>Campus Ica · Ingeniería de Sistemas</p><h1>Coordinación Académica</h1></div></div><div class="header-code" aria-hidden="true">&lt;/&gt;</div><button class="logout-button" id="logout-button" type="button">Cerrar sesión</button></header>
   <div class="app-layout">
     <nav class="sidebar" aria-label="Menú principal">
       <button class="nav-link active" type="button" data-view="dashboard">🏠 Inicio</button>
@@ -16,58 +36,34 @@
       <button class="nav-link" type="button" data-view="notes">📝 Notas y pendientes</button>
       <button class="nav-link" type="button" data-view="teachers">👥 Docentes</button>
       <button class="nav-link" type="button" data-view="communications">💬 Comunicaciones</button>
-      <button class="nav-link" type="button" data-view="systems">🖥️ Sistemas externos</button>
+      <button class="nav-link" type="button" data-view="systems">🖥️ Recursos académicos</button>
+      <aside class="sidebar-profile" aria-label="Información del coordinador"><div class="sidebar-avatar" aria-hidden="true">LL</div><div class="sidebar-profile-copy"><strong>Luis Alberto Loo Parian</strong><span>Ing. de Sistemas</span><span>Coordinación Académica</span></div><dl><div><dt>Campus</dt><dd>UTP Ica</dd></div><div><dt>Ciclo</dt><dd>2026-II</dd></div></dl><div class="sidebar-clock"><span aria-hidden="true">🕒</span><time id="datetime" aria-live="polite"></time></div><p>lloop@utp.edu.pe</p></aside>
     </nav>
 
     <main class="content-area">
       <section class="view" id="dashboard-view" data-view-panel="dashboard" aria-labelledby="dashboard-heading">
-        <h2 id="dashboard-heading">📊 Dashboard</h2>
-        <p class="view-intro">Resumen de tus actividades y accesos principales.</p>
+        <section class="dashboard-hero" aria-labelledby="dashboard-heading">
+          <div class="dashboard-hero-content"><p class="dashboard-eyebrow">Ciclo 2026-II</p><h2 id="dashboard-heading"><span id="dashboard-greeting">Bienvenido</span>, Luis</h2><p>Estas son las prioridades de la Coordinación Académica.</p><div class="dashboard-hero-meta"><span id="dashboard-today">Hoy</span></div></div>
+          <div class="dashboard-hero-actions"><button class="hero-primary" type="button" data-view="plan">＋ Nueva actividad</button><button class="hero-secondary" type="button" data-view="teachers">Ver docentes</button></div>
+        </section>
 
-        <div class="dashboard-toolbar">
-          <div class="form-field compact-field">
-            <label for="dashboard-search">Buscar</label>
-            <input id="dashboard-search" type="search" placeholder="Notas, docentes o actividades..." autocomplete="off">
-          </div>
-          <div class="form-field compact-field">
-            <label for="dashboard-priority-filter">Prioridad</label>
-            <select id="dashboard-priority-filter">
-              <option value="">Todas</option>
-              <option value="alta">Alta</option>
-              <option value="media">Media</option>
-              <option value="baja">Baja</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="dashboard-summary">
-          <article><strong id="dashboard-total">0</strong><span>Actividades</span></article>
-          <article><strong id="dashboard-pending">0</strong><span>Pendientes</span></article>
-          <article><strong id="dashboard-overdue">0</strong><span>Vencidas</span></article>
-          <article><strong id="dashboard-completion">0%</strong><span>Avance general</span></article>
+        <div class="dashboard-summary" aria-label="Indicadores principales">
+          <article class="summary-total"><span class="summary-icon" aria-hidden="true">▦</span><div><strong id="dashboard-total">0</strong><span>Actividades</span></div></article>
+          <article class="summary-pending"><span class="summary-icon" aria-hidden="true">◷</span><div><strong id="dashboard-pending">0</strong><span>Pendientes</span></div></article>
+          <article class="summary-overdue"><span class="summary-icon" aria-hidden="true">!</span><div><strong id="dashboard-overdue">0</strong><span>Vencidas</span></div></article>
+          <article class="summary-progress"><span class="summary-icon" aria-hidden="true">✓</span><div><strong id="dashboard-completion">0%</strong><span>Avance general</span></div></article>
         </div>
         <div class="dashboard-grid">
-          <section class="dashboard-panel" aria-labelledby="recent-notes-heading">
+          <section class="dashboard-panel dashboard-panel-wide" aria-labelledby="recent-notes-heading">
             <div class="section-heading"><h3 id="recent-notes-heading">📝 Últimos pendientes</h3><button class="text-button" type="button" data-view="notes">Ver todos</button></div>
             <ul class="dashboard-notes" id="dashboard-notes-list"></ul>
             <p class="empty-teachers" id="dashboard-empty-notes">Aún no tienes notas ni pendientes.</p>
           </section>
-          <section class="dashboard-panel" aria-labelledby="quick-links-heading">
-            <h3 id="quick-links-heading">⚡ Accesos rápidos</h3>
-            <div class="quick-links">
-              <button type="button" data-view="plan">Gestionar plan</button>
-              <button type="button" data-view="teachers">Gestionar docentes</button>
-              <button type="button" data-view="systems">Abrir sistemas</button>
-            </div>
-          </section>
         </div>
 
         <div class="dashboard-grid secondary-grid">
-          <section class="dashboard-panel" aria-labelledby="daily-summary-heading">
-            <h3 id="daily-summary-heading">📌 Resumen del día</h3>
-            <ul class="summary-list" id="dashboard-summary-list"></ul>
-          </section>
-          <section class="dashboard-panel" aria-labelledby="urgent-heading">
+          <ul id="dashboard-summary-list" hidden></ul>
+          <section class="dashboard-panel dashboard-panel-wide" aria-labelledby="urgent-heading">
             <div class="section-heading"><h3 id="urgent-heading">🚨 Tareas urgentes</h3><button class="text-button" type="button" data-view="plan">Ver plan</button></div>
             <ul class="urgent-list" id="urgent-tasks-list"></ul>
             <p class="empty-teachers" id="urgent-empty">No hay tareas urgentes en este momento.</p>
@@ -81,6 +77,7 @@
           </section>
           <section class="dashboard-panel" aria-labelledby="alerts-heading">
             <h3 id="alerts-heading">🔔 Alertas rápidas</h3>
+            <div class="dashboard-toolbar"><div class="form-field compact-field"><label for="dashboard-search">Buscar</label><input id="dashboard-search" type="search" placeholder="Actividad o nota..." autocomplete="off"></div><div class="form-field compact-field"><label for="dashboard-priority-filter">Prioridad</label><select id="dashboard-priority-filter"><option value="">Todas</option><option value="alta">Alta</option><option value="media">Media</option><option value="baja">Baja</option></select></div></div>
             <ul class="summary-list" id="dashboard-alerts-list"></ul>
           </section>
         </div>
@@ -89,7 +86,7 @@
       <section class="view" id="notes-view" data-view-panel="notes" aria-labelledby="notes-heading" hidden>
         <section class="notes-section" aria-labelledby="notes-heading">
           <div class="section-heading"><div><h2 id="notes-heading">📝 Notas y pendientes</h2><p>Guarda recordatorios para consultarlos cuando los necesites.</p></div></div>
-          <form class="note-form" id="note-form"><label for="note-text">Nuevo pendiente o apunte</label><textarea id="note-text" required maxlength="500" placeholder="Ej.: Revisar la carga de exámenes del curso…"></textarea><button class="primary-button" type="submit">Guardar nota</button></form>
+          <form class="note-form" id="note-form"><input type="hidden" id="editing-note-id"><label for="note-text">Nuevo pendiente o apunte</label><textarea id="note-text" required maxlength="500" placeholder="Ej.: Revisar la carga de exámenes del curso…"></textarea><div class="note-form-footer"><label class="urgent-note-control"><input id="note-urgent" type="checkbox"> <span><strong>Marcar como urgente</strong><small>Se mostrará con prioridad.</small></span></label><div class="note-form-actions"><button class="primary-button" id="save-note" type="submit">Guardar nota</button><button class="secondary-button" id="cancel-note-edit" type="button" hidden>Cancelar edición</button></div></div></form>
           <p class="form-status" id="note-status" role="status" aria-live="polite"></p>
           <ul class="notes-list" id="notes-list"></ul><p class="empty-teachers" id="empty-notes">Aún no tienes notas ni pendientes.</p>
         </section>
@@ -98,20 +95,27 @@
       <section class="view" id="plan-view" data-view-panel="plan" aria-labelledby="plan-heading" hidden>
         <section class="plan-section" aria-labelledby="plan-heading">
           <div class="section-heading"><div><h2 id="plan-heading">📋 Plan de trabajo</h2><p>Registra actividades y monitorea el avance de tus objetivos.</p></div></div>
+          <div class="plan-axes" aria-label="Ejes del plan de trabajo">
+            <details class="axis-card" open><summary><span>01</span><strong>Acompañamiento y seguimiento docente</strong></summary><p>Fortalece las buenas prácticas académicas y la mejora continua docente.</p><ul><li>Monitoreo y observación de sesiones.</li><li>Buenas prácticas y oportunidades de mejora.</li><li>Orientación y acompañamiento a docentes nuevos.</li></ul><small>Responsable principal: Yuyde Ccencho</small></details>
+            <details class="axis-card"><summary><span>02</span><strong>Responsabilidad Social Universitaria</strong></summary><p>Acerca los conocimientos de la carrera a la comunidad mediante seguridad de la información y alfabetización digital.</p><ul><li>Seguridad digital y prevención de riesgos.</li><li>Herramientas digitales, IA y ciudadanía digital.</li><li>Mínimo una actividad mensual para la comunidad.</li></ul><small>Responsable principal: Raúl Cabrera</small></details>
+            <details class="axis-card"><summary><span>03</span><strong>Fortalecimiento académico y desarrollo profesional</strong></summary><p>Complementa la formación estudiantil y su acercamiento al entorno profesional.</p><ul><li>Charlas, conferencias, webinars y talleres.</li><li>Certificaciones, innovación e Inteligencia Artificial.</li><li>Impulso del Club de Estudiantes PMI.</li></ul><small>Responsables: Armando Donayre e Iván Huamán</small></details>
+            <details class="axis-card"><summary><span>04</span><strong>Monitoreo preventivo de indicadores académicos</strong></summary><p>Apoya el seguimiento de compromisos e indicadores de la Coordinación de Carrera.</p><ul><li>Anuncios, foros y registro oportuno de notas.</li><li>Carga de sesiones y materiales en plataforma.</li><li>Comunicación preventiva y reporte de incidencias.</li></ul><small>Responsables: Yuyde Ccencho y Coordinación de Carrera</small></details>
+          </div>
+          <p class="plan-leadership"><strong>Líneas complementarias:</strong> Ana Garayar — investigación y sustentaciones · Iván Huamán — certificaciones y actividades institucionales · Coordinación de Carrera — dirección y seguimiento general.</p>
           <div class="plan-summary" aria-label="Resumen del plan de trabajo"><article><strong id="plan-total">0</strong><span>Total</span></article><article><strong id="plan-pending">0</strong><span>Pendientes</span></article><article><strong id="plan-progress">0</strong><span>En proceso</span></article><article><strong id="plan-completed">0</strong><span>Completadas</span></article><article><strong id="plan-overdue">0</strong><span>Vencidas</span></article></div>
           <div class="progress-area"><label for="plan-completion-progress">Avance general: <span id="plan-completion-label">0%</span></label><progress id="plan-completion-progress" value="0" max="100">0%</progress></div>
-          <form class="plan-form" id="plan-form"><input type="hidden" id="editing-plan-id"><div class="form-field plan-task-field"><label for="plan-task">Actividad</label><input id="plan-task" required maxlength="180" autocomplete="off" placeholder="Ej.: Consolidar informe semanal"></div><div class="form-field"><label for="plan-responsible">Responsable</label><input id="plan-responsible" required maxlength="100" autocomplete="name" placeholder="Nombre del responsable"></div><div class="form-field"><label for="plan-due-date">Fecha límite</label><input id="plan-due-date" type="date" required></div><div class="form-field"><label for="plan-priority">Prioridad</label><select id="plan-priority"><option value="media">Media</option><option value="alta">Alta</option><option value="baja">Baja</option></select></div><div class="form-field"><label for="plan-status">Estado</label><select id="plan-status"><option value="pendiente">Pendiente</option><option value="en-proceso">En proceso</option><option value="completado">Completado</option><option value="bloqueado">Bloqueado</option></select></div><div class="form-field plan-observations-field"><label for="plan-observations">Observaciones <span>(opcional)</span></label><textarea id="plan-observations" maxlength="500" placeholder="Notas, dependencias o siguiente paso…"></textarea></div><div class="form-actions"><button class="primary-button" id="save-plan-item" type="submit">Agregar actividad</button><button class="secondary-button" id="cancel-plan-edit" type="button" hidden>Cancelar edición</button></div></form>
+          <form class="plan-form" id="plan-form"><input type="hidden" id="editing-plan-id"><div class="form-field plan-axis-field"><label for="plan-axis">Eje del plan</label><select id="plan-axis" required><option value="">Seleccionar eje</option><option value="acompanamiento">1. Acompañamiento y seguimiento docente</option><option value="rsu">2. Responsabilidad Social Universitaria</option><option value="fortalecimiento">3. Fortalecimiento académico y desarrollo profesional</option><option value="indicadores">4. Monitoreo preventivo de indicadores académicos</option></select></div><div class="form-field plan-task-field"><label for="plan-task">Actividad</label><input id="plan-task" required maxlength="180" autocomplete="off" placeholder="Ej.: Monitorear sesiones de clase"></div><div class="form-field"><label for="plan-responsible">Responsable</label><input id="plan-responsible" required maxlength="100" autocomplete="name" list="plan-responsibles" placeholder="Nombre del responsable"><datalist id="plan-responsibles"><option value="Yuyde Ccencho"><option value="Ana Garayar"><option value="Armando Donayre"><option value="Raúl Cabrera"><option value="Iván Huamán"><option value="Coordinación de Carrera"></datalist></div><div class="form-field"><label for="plan-due-date">Fecha límite</label><input id="plan-due-date" type="date" required></div><div class="form-field"><label for="plan-priority">Prioridad</label><select id="plan-priority"><option value="media">Media</option><option value="alta">Alta</option><option value="baja">Baja</option></select></div><div class="form-field"><label for="plan-status">Estado</label><select id="plan-status"><option value="pendiente">Pendiente</option><option value="en-proceso">En proceso</option><option value="completado">Completado</option><option value="bloqueado">Bloqueado</option></select></div><div class="form-field plan-observations-field"><label for="plan-observations">Observaciones <span>(opcional)</span></label><textarea id="plan-observations" maxlength="500" placeholder="Notas, dependencias o siguiente paso…"></textarea></div><div class="form-actions"><button class="primary-button" id="save-plan-item" type="submit">Agregar actividad</button><button class="secondary-button" id="cancel-plan-edit" type="button" hidden>Cancelar edición</button></div></form>
           <p class="form-status" id="plan-status-message" role="status" aria-live="polite"></p>
-          <div class="plan-filters" aria-label="Filtros del plan de trabajo"><div class="form-field"><label for="plan-status-filter">Estado</label><select id="plan-status-filter"><option value="">Todos</option><option value="pendiente">Pendiente</option><option value="en-proceso">En proceso</option><option value="completado">Completado</option><option value="bloqueado">Bloqueado</option></select></div><div class="form-field"><label for="plan-priority-filter">Prioridad</label><select id="plan-priority-filter"><option value="">Todas</option><option value="alta">Alta</option><option value="media">Media</option><option value="baja">Baja</option></select></div><div class="form-field"><label for="plan-responsible-filter">Responsable</label><select id="plan-responsible-filter"><option value="">Todos</option></select></div><label class="checkbox-label"><input id="plan-overdue-filter" type="checkbox"> Solo vencidas</label></div>
-          <div class="table-wrapper" tabindex="0"><table><caption>Actividades registradas</caption><thead><tr><th scope="col">Actividad</th><th scope="col">Responsable</th><th scope="col">Fecha límite</th><th scope="col">Prioridad</th><th scope="col">Estado</th><th scope="col">Acciones</th></tr></thead><tbody id="plan-table-body"></tbody></table></div><p class="empty-teachers" id="empty-plan">Aún no hay actividades en el plan de trabajo.</p>
+          <div class="plan-filters" aria-label="Filtros del plan de trabajo"><div class="form-field"><label for="plan-axis-filter">Eje</label><select id="plan-axis-filter"><option value="">Todos los ejes</option><option value="acompanamiento">Acompañamiento docente</option><option value="rsu">Responsabilidad Social</option><option value="fortalecimiento">Fortalecimiento académico</option><option value="indicadores">Indicadores académicos</option><option value="sin-eje">Sin eje asignado</option></select></div><div class="form-field"><label for="plan-status-filter">Estado</label><select id="plan-status-filter"><option value="">Todos</option><option value="pendiente">Pendiente</option><option value="en-proceso">En proceso</option><option value="completado">Completado</option><option value="bloqueado">Bloqueado</option></select></div><div class="form-field"><label for="plan-priority-filter">Prioridad</label><select id="plan-priority-filter"><option value="">Todas</option><option value="alta">Alta</option><option value="media">Media</option><option value="baja">Baja</option></select></div><div class="form-field"><label for="plan-responsible-filter">Responsable</label><select id="plan-responsible-filter"><option value="">Todos</option></select></div><label class="checkbox-label"><input id="plan-overdue-filter" type="checkbox"> Solo vencidas</label></div>
+          <div class="table-wrapper" tabindex="0"><table><caption>Actividades registradas por eje</caption><thead><tr><th scope="col">Eje</th><th scope="col">Actividad</th><th scope="col">Responsable</th><th scope="col">Fecha límite</th><th scope="col">Prioridad</th><th scope="col">Estado</th><th scope="col">Acciones</th></tr></thead><tbody id="plan-table-body"></tbody></table></div><p class="empty-teachers" id="empty-plan">Aún no hay actividades en el plan de trabajo.</p>
         </section>
       </section>
 
       <section class="view" id="teachers-view" data-view-panel="teachers" aria-labelledby="teachers-heading" hidden>
         <section class="teachers-section" id="teachers-section" aria-labelledby="teachers-heading">
           <div class="section-heading"><div><h2 id="teachers-heading">👥 Gestión de docentes</h2><p>Registra y administra la información principal de los docentes.</p></div></div>
-          <form class="teacher-form" id="teacher-form"><input type="hidden" id="editing-teacher-code"><div class="form-field teacher-search-field"><label for="teacher-filter">Buscar por nombres o apellidos</label><input id="teacher-filter" type="search" placeholder="Ej.: Luis, Pérez o Huamán" autocomplete="off"></div><div class="form-field"><label for="teacher-code">Código de docente</label><input id="teacher-code" name="code" type="text" required maxlength="30" autocomplete="off"></div><div class="form-field"><label for="teacher-first-names">Nombres completos</label><input id="teacher-first-names" name="firstNames" type="text" required maxlength="100" autocomplete="given-name"></div><div class="form-field"><label for="teacher-last-names">Apellidos completos</label><input id="teacher-last-names" name="lastNames" type="text" required maxlength="100" autocomplete="family-name"></div><div class="form-field"><label for="teacher-status">Estado</label><select id="teacher-status"><option value="activo">Activo</option><option value="inactivo">Inactivo</option></select></div><div class="form-actions"><button class="primary-button" id="save-teacher" type="submit">Agregar docente</button><button class="secondary-button" id="cancel-edit" type="button" hidden>Cancelar edición</button></div></form>
-          <p class="form-status" id="form-status" role="status" aria-live="polite"></p><div class="table-wrapper" tabindex="0"><table><caption>Docentes registrados</caption><thead><tr><th scope="col">Código</th><th scope="col">Nombres</th><th scope="col">Apellidos</th><th scope="col">Acciones</th></tr></thead><tbody id="teachers-table-body"></tbody></table></div><p class="empty-teachers" id="empty-teachers">Aún no hay docentes registrados.</p>
+          <form class="teacher-form" id="teacher-form"><input type="hidden" id="editing-teacher-code"><div class="form-field teacher-search-field"><label for="teacher-filter">Buscar por nombres, apellidos o teléfono</label><input id="teacher-filter" type="search" placeholder="Ej.: Luis, Pérez o 987654321" autocomplete="off"></div><div class="form-field"><label for="teacher-code">Código de docente</label><input id="teacher-code" name="code" type="text" required maxlength="30" autocomplete="off"></div><div class="form-field"><label for="teacher-first-names">Nombres completos</label><input id="teacher-first-names" name="firstNames" type="text" required maxlength="100" autocomplete="given-name"></div><div class="form-field"><label for="teacher-last-names">Apellidos completos</label><input id="teacher-last-names" name="lastNames" type="text" required maxlength="100" autocomplete="family-name"></div><div class="form-field"><label for="teacher-phone">Teléfono</label><input id="teacher-phone" name="phone" type="tel" maxlength="20" autocomplete="tel" inputmode="tel" placeholder="Ej.: 987654321"></div><div class="form-field"><label for="teacher-status">Estado</label><select id="teacher-status"><option value="activo">Activo</option><option value="inactivo">Inactivo</option></select></div><div class="form-actions"><button class="primary-button" id="save-teacher" type="submit">Agregar docente</button><button class="secondary-button" id="cancel-edit" type="button" hidden>Cancelar edición</button></div></form>
+          <p class="form-status" id="form-status" role="status" aria-live="polite"></p><div class="table-wrapper" tabindex="0"><table><caption>Docentes registrados</caption><thead><tr><th scope="col">Código</th><th scope="col">Nombres</th><th scope="col">Apellidos</th><th scope="col">Teléfono</th><th scope="col">Estado</th><th scope="col">Acciones</th></tr></thead><tbody id="teachers-table-body"></tbody></table></div><p class="empty-teachers" id="empty-teachers">Aún no hay docentes registrados.</p>
         </section>
       </section>
 
@@ -120,18 +124,27 @@
           <div class="section-heading"><div><h2 id="communications-heading">💬 Comunicaciones WhatsApp</h2><p>Accesos rápidos a los grupos de docentes.</p></div></div>
           <div class="communications-grid">
             <article class="communication-card"><h3>Grupo general</h3><p>Comunicados dirigidos a todos los docentes.</p><a class="system-link" href="https://chat.whatsapp.com/GV3VfJkPSfnIOaSnlkfbu4" target="_blank" rel="noopener noreferrer">Abrir grupo</a></article>
-            <article class="communication-card"><h3>Docentes a tiempo completo</h3><p>Comunicados exclusivos para docentes TC.</p><button class="system-link" type="button" disabled>Enlace pendiente</button></article>
+            <article class="communication-card"><h3>Docentes a tiempo completo</h3><p>Comunicados exclusivos para docentes TC.</p><a class="system-link" href="https://chat.whatsapp.com/CPVNDOvjCKeBFSUA13kMy8" target="_blank" rel="noopener noreferrer" aria-label="Abrir grupo de WhatsApp de docentes a tiempo completo">Abrir grupo</a></article>
+            <article class="communication-card"><h3>Docentes de cursos remotos</h3><p>Comunicados y coordinación para docentes de cursos remotos.</p><a class="system-link" href="https://chat.whatsapp.com/IFTLzjXZArgKLZzsOb7rzm" target="_blank" rel="noopener noreferrer" aria-label="Abrir grupo de WhatsApp de docentes de cursos remotos">Abrir grupo</a></article>
+            <article class="communication-card"><h3>Delegados</h3><p>Comunicados y coordinación con los delegados de Ingeniería de Sistemas.</p><button class="system-link" type="button" disabled>Enlace pendiente</button></article>
+            <article class="communication-card"><h3>Certificación Cisco</h3><p>Información, coordinación y seguimiento de actividades de certificación Cisco.</p><a class="system-link" href="https://chat.whatsapp.com/JIlPn7yBCCgDAfUU7ihrpj" target="_blank" rel="noopener noreferrer" aria-label="Abrir grupo de WhatsApp de Certificación Cisco">Abrir grupo</a></article>
           </div>
         </section>
       </section>
 
-      <section class="view" id="systems-view" data-view-panel="systems" aria-labelledby="systems-heading" hidden><section class="options-section" aria-labelledby="systems-heading"><h2 id="systems-heading">Sistemas externos</h2><p class="view-intro">Accesos a las plataformas académicas y administrativas.</p><div class="systems-grid" id="systems" role="list"></div></section></section>
-      <p class="footer-note">Los sistemas se abrirán en una nueva pestaña para preservar la autenticación y evitar bloqueos de contenido integrado.</p>
+      <section class="view" id="systems-view" data-view-panel="systems" aria-labelledby="systems-heading" hidden><section class="options-section" aria-labelledby="systems-heading"><h2 id="systems-heading">Recursos académicos</h2><p class="view-intro">Consulta reportes, documentos y plataformas utilizadas por la coordinación académica.</p><section class="resource-group" aria-labelledby="reports-heading"><div class="resource-group-heading"><span class="resource-group-icon" aria-hidden="true">📊</span><div><h3 id="reports-heading">Reportes académicos</h3><p>Indicadores y seguimiento de la actividad académica.</p></div></div><div class="systems-grid" id="reports" role="list"></div></section><section class="resource-group" aria-labelledby="documents-heading"><div class="resource-group-heading"><span class="resource-group-icon" aria-hidden="true">📚</span><div><h3 id="documents-heading">Documentos académicos</h3><p>Archivos de consulta para la gestión de cursos.</p></div></div><div class="systems-grid" id="academic-documents" role="list"></div></section><section class="resource-group" aria-labelledby="platforms-heading"><div class="resource-group-heading"><span class="resource-group-icon" aria-hidden="true">🧰</span><div><h3 id="platforms-heading">Plataformas y herramientas</h3><p>Accesos de gestión, comunicación y soporte.</p></div></div><div class="systems-grid" id="systems" role="list"></div></section></section></section>
+      <p class="footer-note">Los recursos se abrirán en una nueva pestaña para preservar la autenticación y evitar bloqueos de contenido integrado.</p>
     </main>
   </div>
   <footer class="page-footer">
     <p class="footer-credit">Hecho por Impulsa TI</p>
   </footer>
+  <dialog class="schedule-dialog" id="schedule-dialog" aria-labelledby="schedule-title">
+    <div class="schedule-dialog-header"><div><p class="schedule-eyebrow">Carga lectiva 2026-II</p><h2 id="schedule-title">Horario del docente</h2><p id="schedule-teacher-code"></p></div><button class="dialog-close" id="close-schedule" type="button" aria-label="Cerrar horario">×</button></div>
+    <div class="schedule-empty" id="schedule-empty"><span aria-hidden="true">📅</span><h3>Horario pendiente de importar</h3><p>El botón está listo. Los cursos, días y horas de este docente aparecerán aquí cuando se integre el archivo de carga lectiva.</p></div>
+    <div class="schedule-dialog-actions"><button class="secondary-button" id="close-schedule-footer" type="button">Cerrar</button></div>
+  </dialog>
+  </div>
   <script src="app.js" defer></script>
 </body>
 </html>
