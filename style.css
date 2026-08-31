@@ -239,7 +239,7 @@ body.is-authenticated { overflow: hidden; }
   letter-spacing: .04em;
 }
 
-.teachers-section, .notes-section, .plan-section, .communications-section {
+.teachers-section, .notes-section, .plan-section, .communications-section, .backup-section {
   margin-top: 2rem;
   padding: 1.5rem;
   background: linear-gradient(180deg, var(--surface) 0%, var(--surface-soft) 100%);
@@ -248,6 +248,22 @@ body.is-authenticated { overflow: hidden; }
   border-radius: 1rem;
   box-shadow: var(--shadow-soft);
 }
+.backup-eyebrow { color: var(--accent); font-size: .72rem; font-weight: 850; letter-spacing: .12em; text-transform: uppercase; }
+.backup-summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75rem; margin-top: 1.25rem; }
+.backup-summary article { padding: .9rem; border: 1px solid var(--border); border-radius: .7rem; background: #f8fafc; text-align: center; }
+.backup-summary strong { display: block; color: var(--accent); font-size: 1.55rem; }
+.backup-summary span { color: var(--muted); font-size: .78rem; }
+.backup-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin-top: 1rem; }
+.backup-card { display: grid; grid-template-columns: auto 1fr; align-items: start; gap: 1rem; padding: 1.25rem; border: 1px solid var(--border); border-radius: .9rem; background: #fff; box-shadow: var(--shadow-soft); }
+.backup-card-icon { display: grid; place-items: center; width: 2.8rem; height: 2.8rem; border-radius: .75rem; background: var(--accent-soft); color: var(--accent-dark); font-size: 1.4rem; font-weight: 900; }
+.backup-card p { margin-top: .35rem; color: var(--muted); font-size: .85rem; }
+.backup-card ul { margin: .8rem 0 0; padding-left: 1.2rem; color: var(--muted); font-size: .8rem; }
+.backup-card > button { grid-column: 1 / -1; width: 100%; }
+.backup-file-control { display: grid; gap: .15rem; margin-top: .9rem; padding: .7rem .8rem; border: 1px dashed #9ca3af; border-radius: .6rem; background: #f8fafc; cursor: pointer; }
+.backup-file-control span { font-size: .8rem; font-weight: 800; }
+.backup-file-control small { overflow: hidden; color: var(--muted); text-overflow: ellipsis; white-space: nowrap; }
+#backup-file { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+.backup-notice { display: flex; gap: .7rem; margin-top: 1rem; padding: .8rem 1rem; border-radius: .65rem; background: #eff6ff; color: #1e3a8a; font-size: .82rem; }
 
 .options-section { margin-top: 2rem; }
 .communications-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-top: 1.25rem; }
@@ -553,6 +569,7 @@ th { background: #f0f0f0; color: var(--black); font-size: .85rem; }
   .dashboard-hero { min-height: auto; align-items: flex-start; flex-direction: column; }
   .dashboard-hero-actions { grid-template-columns: 1fr 1fr; width: 100%; }
   .teacher-form, .plan-form, .plan-filters { grid-template-columns: 1fr; }
+  .backup-grid { grid-template-columns: 1fr; }
   .section-heading { flex-direction: column; }
   .note-item { flex-wrap: wrap; }
   .note-form-footer { align-items: flex-start; flex-direction: column; }

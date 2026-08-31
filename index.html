@@ -37,6 +37,7 @@
       <button class="nav-link" type="button" data-view="teachers">👥 Docentes</button>
       <button class="nav-link" type="button" data-view="communications">💬 Comunicaciones</button>
       <button class="nav-link" type="button" data-view="systems">🖥️ Recursos académicos</button>
+      <button class="nav-link" type="button" data-view="backup">💾 Respaldos</button>
       <aside class="sidebar-profile" aria-label="Información del coordinador"><div class="sidebar-avatar" aria-hidden="true">LL</div><div class="sidebar-profile-copy"><strong>Luis Alberto Loo Parian</strong><span>Ing. de Sistemas</span><span>Coordinación Académica</span></div><dl><div><dt>Campus</dt><dd>UTP Ica</dd></div><div><dt>Ciclo</dt><dd>2026-II</dd></div></dl><div class="sidebar-clock"><span aria-hidden="true">🕒</span><time id="datetime" aria-live="polite"></time></div><p>lloop@utp.edu.pe</p></aside>
     </nav>
 
@@ -129,6 +130,19 @@
             <article class="communication-card"><h3>Delegados</h3><p>Comunicados y coordinación con los delegados de Ingeniería de Sistemas.</p><button class="system-link" type="button" disabled>Enlace pendiente</button></article>
             <article class="communication-card"><h3>Certificación Cisco</h3><p>Información, coordinación y seguimiento de actividades de certificación Cisco.</p><a class="system-link" href="https://chat.whatsapp.com/JIlPn7yBCCgDAfUU7ihrpj" target="_blank" rel="noopener noreferrer" aria-label="Abrir grupo de WhatsApp de Certificación Cisco">Abrir grupo</a></article>
           </div>
+        </section>
+      </section>
+
+      <section class="view" id="backup-view" data-view-panel="backup" aria-labelledby="backup-heading" hidden>
+        <section class="backup-section" aria-labelledby="backup-heading">
+          <div class="section-heading"><div><p class="backup-eyebrow">Seguridad de datos</p><h2 id="backup-heading">💾 Copias de respaldo</h2><p>Transfiere tu información entre la versión local, GitHub Pages y otros navegadores.</p></div></div>
+          <div class="backup-summary" aria-label="Datos incluidos en el respaldo"><article><strong id="backup-teachers-count">0</strong><span>Docentes</span></article><article><strong id="backup-notes-count">0</strong><span>Notas</span></article><article><strong id="backup-plan-count">0</strong><span>Actividades</span></article></div>
+          <div class="backup-grid">
+            <article class="backup-card export-card"><span class="backup-card-icon" aria-hidden="true">↓</span><div><h3>Exportar información</h3><p>Descarga un archivo con todos los datos guardados actualmente en este navegador.</p><ul><li>Docentes y teléfonos</li><li>Notas, urgencia y estado</li><li>Actividades del plan de trabajo</li></ul></div><button class="primary-button" id="export-backup" type="button">Descargar respaldo</button></article>
+            <article class="backup-card import-card"><span class="backup-card-icon" aria-hidden="true">↑</span><div><h3>Importar información</h3><p>Selecciona un respaldo anterior. Los datos actuales serán reemplazados después de tu confirmación.</p><label class="backup-file-control" for="backup-file"><span>Seleccionar archivo JSON</span><small id="backup-file-name">Ningún archivo seleccionado</small></label><input id="backup-file" type="file" accept="application/json,.json"></div><button class="secondary-button" id="import-backup" type="button" disabled>Restaurar respaldo</button></article>
+          </div>
+          <div class="backup-notice"><span aria-hidden="true">ℹ️</span><p><strong>Importante:</strong> guarda el archivo en una ubicación segura. El respaldo no contiene tu contraseña de acceso.</p></div>
+          <p class="form-status" id="backup-status" role="status" aria-live="polite"></p>
         </section>
       </section>
 

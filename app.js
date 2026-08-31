@@ -192,6 +192,12 @@ const calendarNextButton = document.getElementById('calendar-next');
 const calendarMonthLabel = document.getElementById('calendar-month-label');
 const dashboardCalendar = document.getElementById('dashboard-calendar');
 const dashboardAlertsList = document.getElementById('dashboard-alerts-list');
+const exportBackupButton = document.getElementById('export-backup');
+const importBackupButton = document.getElementById('import-backup');
+const backupFileInput = document.getElementById('backup-file');
+const backupFileName = document.getElementById('backup-file-name');
+const backupStatus = document.getElementById('backup-status');
+let selectedBackupFile = null;
 let calendarViewDate = new Date();
 
 function normalizeSearchText(value) {
@@ -318,6 +324,69 @@ function loadPlanItems() {
 
 function savePlanItems() {
   localStorage.setItem(planStorageKey, JSON.stringify(planItems));
+}
+
+function renderBackupSummary() {
+  document.getElementById('backup-teachers-count').textContent = teachers.length;
+  document.getElementById('backup-notes-count').textContent = notes.length;
+  document.getElementById('backup-plan-count').textContent = planItems.length;
+}
+
+function exportBackup() {
+  const backup = {
+    application: 'SISCO - Coordinación Académica de Ingeniería de Sistemas',
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    data: { teachers, notes, planItems }
+  };
+  const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+  const downloadUrl = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = downloadUrl;
+  link.download = `sisco-respaldo-${getToday()}.json`;
+  document.body.append(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(downloadUrl);
+  backupStatus.textContent = 'Respaldo descargado correctamente.';
+}
+
+function normalizeBackup(backup) {
+  if (!backup || backup.application !== 'SISCO - Coordinación Académica de Ingeniería de Sistemas' || !backup.data) throw new Error('El archivo no corresponde a un respaldo válido de SISCO.');
+  const importedTeachers = Array.isArray(backup.data.teachers) ? backup.data.teachers.filter((teacher) => teacher && teacher.code && teacher.firstNames && teacher.lastNames).map(normalizeTeacherStatus) : [];
+  const importedNotes = Array.isArray(backup.data.notes) ? backup.data.notes.filter((note) => note && note.id && typeof note.text === 'string') : [];
+  const importedPlanItems = Array.isArray(backup.data.planItems) ? backup.data.planItems.filter((item) => item && item.id && item.task && item.responsible && item.dueDate) : [];
+  return { importedTeachers, importedNotes, importedPlanItems };
+}
+
+async function importBackup() {
+  if (!selectedBackupFile) return;
+  try {
+    const backup = JSON.parse(await selectedBackupFile.text());
+    const { importedTeachers, importedNotes, importedPlanItems } = normalizeBackup(backup);
+    const message = `Se restaurarán ${importedTeachers.length} docentes, ${importedNotes.length} notas y ${importedPlanItems.length} actividades. Los datos actuales serán reemplazados. ¿Deseas continuar?`;
+    if (!window.confirm(message)) return;
+    teachers = importedTeachers;
+    notes = importedNotes;
+    planItems = importedPlanItems;
+    localStorage.setItem(teachersSeededKey, 'true');
+    saveTeachers();
+    saveNotes();
+    savePlanItems();
+    renderTeachers();
+    renderNotes();
+    renderPlan();
+    renderDashboardAlerts();
+    renderDashboardCalendar();
+    renderBackupSummary();
+    backupStatus.textContent = 'Respaldo restaurado correctamente.';
+    backupFileInput.value = '';
+    backupFileName.textContent = 'Ningún archivo seleccionado';
+    importBackupButton.disabled = true;
+    selectedBackupFile = null;
+  } catch (error) {
+    backupStatus.textContent = error instanceof SyntaxError ? 'No se pudo leer el archivo JSON seleccionado.' : error.message;
+  }
 }
 
 function getToday() {
@@ -1084,6 +1153,7 @@ function showView(viewName) {
   if (viewName === 'teachers') renderTeachers();
   if (viewName === 'plan') renderPlan();
   if (viewName === 'notes') renderNotes();
+  if (viewName === 'backup') renderBackupSummary();
   if (viewName === 'dashboard') {
     renderDashboardAlerts();
     renderDashboardCalendar();
@@ -1218,6 +1288,15 @@ planStatusFilter.addEventListener('input', renderPlan);
 planPriorityFilter.addEventListener('input', renderPlan);
 planResponsibleFilter.addEventListener('input', renderPlan);
 planOverdueFilter.addEventListener('change', renderPlan);
+
+exportBackupButton.addEventListener('click', exportBackup);
+backupFileInput.addEventListener('change', () => {
+  selectedBackupFile = backupFileInput.files[0] || null;
+  backupFileName.textContent = selectedBackupFile ? selectedBackupFile.name : 'Ningún archivo seleccionado';
+  importBackupButton.disabled = !selectedBackupFile;
+  backupStatus.textContent = '';
+});
+importBackupButton.addEventListener('click', importBackup);
 
 dashboardSearchInput.addEventListener('input', () => {
   renderDashboardAlerts();
