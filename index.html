@@ -5,24 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#111111">
   <title>Coordinación Académica de Ingeniería de Sistemas | UTP Ica</title>
-  <link rel="stylesheet" href="style.css?v=20260902-10">
+  <link rel="stylesheet" href="style.css?v=20260902-13">
 </head>
 <body>
   <main class="login-screen" id="login-screen">
     <section class="login-card" aria-labelledby="login-title"><button class="login-theme-toggle theme-toggle" type="button" data-theme-toggle aria-label="Activar tema oscuro" aria-pressed="false"><span aria-hidden="true">☾</span><span>Tema oscuro</span></button>
-      <header class="login-identity"><div class="login-brand" aria-hidden="true">UTP</div><div><strong>SISCO</strong><span>Sistema de Coordinación Académica</span></div></header>
-      <div class="login-heading"><span class="login-security-badge">● Acceso seguro</span><p class="login-eyebrow">Universidad Tecnológica del Perú</p><h1 id="login-title">Bienvenido</h1><p class="login-description">Ingresa para administrar la Coordinación Académica de Ingeniería de Sistemas.</p></div>
-      <div class="login-form-card"><div class="login-form-heading"><div><h2>Iniciar sesión</h2><p>Utiliza tus credenciales autorizadas.</p></div><span aria-hidden="true">🔐</span></div><form class="login-form" id="login-form" novalidate>
+      <header class="login-identity"><div class="login-brand" aria-hidden="true">UTP</div><div><strong>SISCO</strong><span>Coordinación Académica</span></div></header>
+      <div class="login-heading"><span class="login-security-badge">● Acceso seguro</span><h1 id="login-title">Bienvenido</h1><p class="login-description">Ingresa a tu panel de Ingeniería de Sistemas.</p></div>
+      <div class="login-form-card"><div class="login-form-heading"><div><h2>Iniciar sesión</h2></div><span aria-hidden="true">🔐</span></div><form class="login-form" id="login-form" novalidate>
         <div class="login-field"><label for="login-email">Correo institucional</label><div class="login-input-control"><span aria-hidden="true">@</span><input id="login-email" name="email" type="email" autocomplete="username" value="lloop@utp.edu.pe" placeholder="nombre@utp.edu.pe" required></div></div>
         <div class="login-field"><label for="login-password">Contraseña</label><div class="password-control login-input-control"><span aria-hidden="true">●</span><input id="login-password" name="password" type="password" autocomplete="current-password" placeholder="Ingresa tu contraseña" required><button id="toggle-password" type="button" aria-label="Mostrar contraseña" aria-pressed="false">Mostrar</button></div></div>
         <div class="login-session-row"><label class="remember-control"><input id="remember-session" type="checkbox"> Mantener mi sesión activa</label><span>Uso institucional</span></div>
         <p class="login-error" id="login-error" role="alert" aria-live="polite"></p>
         <button class="login-button" type="submit">Ingresar a SISCO <span aria-hidden="true">→</span></button>
       </form></div>
-      <div class="demo-access"><span aria-hidden="true">👤</span><div><strong>Cuenta de coordinación</strong><span>lloop@utp.edu.pe</span></div></div>
-      <p class="login-help"><span aria-hidden="true">🛡️</span> Acceso exclusivo para personal autorizado · Soporte Impulsa TI</p>
+      <p class="login-help"><span aria-hidden="true">🛡️</span> Acceso exclusivo para personal autorizado</p>
     </section>
-    <aside class="login-visual" aria-label="Coordinación Académica de Ingeniería de Sistemas"><div class="login-campus-label"><span aria-hidden="true">📍</span><div><small>Universidad Tecnológica del Perú</small><strong>Campus Ica</strong></div></div><div class="systems-emblem" aria-hidden="true"><span>&lt;/&gt;</span></div><div class="visual-content"><span>Ingeniería de Sistemas</span><h2>Coordinación Académica</h2><p>Centraliza la gestión de docentes, actividades, comunicaciones y recursos de la carrera.</p><div class="login-feature-grid"><article><strong>Gestión</strong><span>Docentes y horarios</span></article><article><strong>Seguimiento</strong><span>Planes e indicadores</span></article><article><strong>Conexión</strong><span>Canales y recursos</span></article></div><div class="career-tags" aria-label="Áreas de Ingeniería de Sistemas"><span>Innovación</span><span>Software</span><span>Datos</span><span>Ciberseguridad</span></div></div></aside>
+    <aside class="login-visual" aria-label="Coordinación Académica de Ingeniería de Sistemas"><div class="login-campus-label"><span aria-hidden="true">📍</span><div><small>Universidad Tecnológica del Perú</small><strong>Campus Ica</strong></div></div><div class="systems-emblem" aria-hidden="true"><span>&lt;/&gt;</span></div><div class="visual-content"><span>Ingeniería de Sistemas</span><h2>Coordinación Académica</h2><p>Gestión académica centralizada.</p></div></aside>
   </main>
 
   <div id="app-shell" hidden>
@@ -118,8 +117,8 @@
 
       <section class="view" id="communities-view" data-view-panel="communities" aria-labelledby="communities-heading" hidden>
         <section class="communities-section" aria-labelledby="communities-heading">
-          <div class="section-heading"><div><p class="communities-eyebrow">Gestión por periodo académico</p><h2 id="communities-heading">🚀 Comunidades Tecnológicas</h2><p>Planifica actividades, registra resultados y monitorea el avance de las comunidades estudiantiles.</p></div><div class="community-heading-actions"><label class="period-selector" for="community-period"><span>Periodo</span><select id="community-period"><option value="2026-II">2026-II</option><option value="2027-I">2027-I</option><option value="2027-II">2027-II</option><option value="2028-I">2028-I</option><option value="2028-II">2028-II</option></select></label><button class="secondary-button" id="manage-community-members" type="button">👥 Estudiantes</button><button class="primary-button" id="new-community-activity" type="button">＋ Nueva actividad</button></div></div>
-          <div class="community-kpis" aria-label="Indicadores de comunidades"><article><strong id="community-count">3</strong><span>Comunidades</span></article><article><strong id="community-registered-count">0</strong><span>Programadas</span></article><article><strong id="community-executed-count">0</strong><span>Ejecutadas</span></article><article><strong id="community-evidence-count">0%</strong><span>Con evidencia</span></article></div>
+          <div class="community-hero"><div><p class="communities-eyebrow">Ecosistema estudiantil · Campus Ica</p><h2 id="communities-heading">Comunidades Tecnológicas</h2><p>Organiza estudiantes, actividades y evidencias del periodo académico.</p></div><div class="community-heading-actions"><label class="period-selector" for="community-period"><span>Periodo</span><select id="community-period"><option value="2026-II">2026-II</option><option value="2027-I">2027-I</option><option value="2027-II">2027-II</option><option value="2028-I">2028-I</option><option value="2028-II">2028-II</option></select></label><button class="secondary-button" id="manage-community-members" type="button">👥 Estudiantes</button><button class="primary-button" id="new-community-activity" type="button">＋ Nueva actividad</button></div></div>
+          <div class="community-kpis" aria-label="Indicadores de comunidades"><article><span aria-hidden="true">◇</span><div><strong id="community-count">3</strong><small>Comunidades</small></div></article><article><span aria-hidden="true">📅</span><div><strong id="community-registered-count">0</strong><small>Programadas</small></div></article><article><span aria-hidden="true">✓</span><div><strong id="community-executed-count">0</strong><small>Ejecutadas</small></div></article><article><span aria-hidden="true">👥</span><div><strong id="community-active-members-count">0</strong><small>Estudiantes activos</small></div></article><article><span aria-hidden="true">📁</span><div><strong id="community-evidence-count">0%</strong><small>Con evidencia</small></div></article></div>
           <div class="community-cards" id="community-cards"></div>
           <ul class="community-alerts" id="community-alerts" aria-label="Alertas preventivas"></ul>
 
@@ -137,7 +136,8 @@
           </section>
           <p class="form-status" id="community-activity-message" role="status" aria-live="polite"></p>
 
-          <div class="community-toolbar"><div class="form-field"><label for="community-filter">Comunidad</label><select id="community-filter"><option value="">Todas</option><option value="developer">Developer</option><option value="infrastructure">Infrastructure & Cybersecurity</option><option value="innovation">Innovation Lab</option><option value="joint">Conjuntas</option></select></div><div class="form-field"><label for="community-status-filter">Estado</label><select id="community-status-filter"><option value="">Todos</option><option value="propuesta">Propuesta</option><option value="aprobada">Aprobada</option><option value="reservada">Ambiente reservado</option><option value="ejecutada">Ejecutada</option><option value="evidenciada">Evidenciada</option></select></div></div>
+          <div class="community-board-heading"><div><h3>Tablero de actividades</h3><p>Consulta el avance y gestiona cada actividad del periodo.</p></div><span id="community-results-count">0 actividades</span></div>
+          <div class="community-toolbar"><div class="form-field community-search-field"><label for="community-search">Buscar actividad</label><input id="community-search" type="search" placeholder="Nombre, responsable o ambiente..."></div><div class="form-field"><label for="community-filter">Comunidad</label><select id="community-filter"><option value="">Todas</option><option value="developer">Developer</option><option value="infrastructure">Infrastructure & Cybersecurity</option><option value="innovation">Innovation Lab</option><option value="joint">Conjuntas</option></select></div><div class="form-field"><label for="community-status-filter">Estado</label><select id="community-status-filter"><option value="">Todos</option><option value="propuesta">Propuesta</option><option value="aprobada">Aprobada</option><option value="reservada">Ambiente reservado</option><option value="ejecutada">Ejecutada</option><option value="evidenciada">Evidenciada</option></select></div></div>
           <div class="table-wrapper" tabindex="0"><table><caption>Tablero consolidado de actividades</caption><thead><tr><th scope="col">Comunidad / actividad</th><th scope="col">Responsable</th><th scope="col">Fecha y ambiente</th><th scope="col">Participantes</th><th scope="col">Estado</th><th scope="col">Evidencia</th><th scope="col">Acciones</th></tr></thead><tbody id="community-activities-body"></tbody></table></div><p class="empty-teachers" id="empty-community-activities">Aún no hay actividades registradas.</p>
         </section>
       </section>
@@ -197,6 +197,6 @@
   </dialog>
   </div>
   <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
-  <script src="app.js?v=20260902-11" defer></script>
+  <script src="app.js?v=20260902-13" defer></script>
 </body>
 </html>

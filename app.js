@@ -32,9 +32,9 @@ themeToggleButtons.forEach((button) => button.addEventListener('click', () => {
 }));
 
 const communityDefinitions = [
-  { id: 'developer', name: 'UTP Developer Community', mentor: 'Armando Donayre', focus: 'Software, IA, datos, GitHub y Cloud', color: '#2563eb' },
-  { id: 'infrastructure', name: 'Infrastructure & Cybersecurity', mentor: 'Iván Huamán', focus: 'Redes, Cisco, infraestructura y ciberseguridad', color: '#059669' },
-  { id: 'innovation', name: 'UTP Innovation Lab', mentor: 'Ana Garayar', focus: 'Innovación, investigación, proyectos y prototipos', color: '#7c3aed' }
+  { id: 'developer', name: 'UTP Developer Community', mentor: 'Armando Donayre', focus: 'Software, IA, datos, GitHub y Cloud', color: '#2563eb', icon: '</>' },
+  { id: 'infrastructure', name: 'Infrastructure & Cybersecurity', mentor: 'Iván Huamán', focus: 'Redes, Cisco, infraestructura y ciberseguridad', color: '#059669', icon: '◉' },
+  { id: 'innovation', name: 'UTP Innovation Lab', mentor: 'Ana Garayar', focus: 'Innovación, investigación, proyectos y prototipos', color: '#7c3aed', icon: '✦' }
 ];
 
 function hasActiveSession() {
@@ -317,6 +317,8 @@ const communityActivityMessage = document.getElementById('community-activity-mes
 const saveCommunityActivityButton = document.getElementById('save-community-activity');
 const communityFilter = document.getElementById('community-filter');
 const communityStatusFilter = document.getElementById('community-status-filter');
+const communitySearch = document.getElementById('community-search');
+const communityResultsCount = document.getElementById('community-results-count');
 const communityPeriod = document.getElementById('community-period');
 const communityStorageKey = 'sisco-community-activities';
 const communityMembersStorageKey = 'sisco-community-members';
@@ -740,8 +742,12 @@ function renderCommunities() {
     const members = periodMembers.filter((member) => member.community === community.id && ['inscrito', 'activo'].includes(member.status)).length;
     const executed = activities.filter((activity) => ['ejecutada', 'evidenciada'].includes(activity.status)).length;
     const nextActivity = activities.filter((activity) => activity.date >= getToday() && !['ejecutada', 'evidenciada'].includes(activity.status)).sort((first, second) => first.date.localeCompare(second.date))[0];
+    const cardTop = document.createElement('div');
+    cardTop.className = 'community-card-top';
+    const icon = document.createElement('span'); icon.className = 'community-card-icon'; icon.textContent = community.icon;
     const tag = document.createElement('small');
     tag.textContent = 'COMUNIDAD PILOTO';
+    cardTop.append(icon, tag);
     const title = document.createElement('h3');
     title.textContent = community.name;
     const focus = document.createElement('p');
@@ -755,7 +761,14 @@ function renderCommunities() {
     const next = document.createElement('span');
     next.textContent = nextActivity ? `Próxima: ${new Intl.DateTimeFormat('es-PE', { day: 'numeric', month: 'short' }).format(new Date(`${nextActivity.date}T00:00:00`))}` : 'Sin próxima actividad';
     meta.append(progress, next);
-    card.append(tag, title, focus, mentor, meta);
+    const progressWrap = document.createElement('div'); progressWrap.className = 'community-card-progress';
+    const progressLabel = document.createElement('span'); progressLabel.textContent = 'Avance de actividades';
+    const progressValue = document.createElement('strong'); progressValue.textContent = `${activities.length ? Math.round((executed / activities.length) * 100) : 0}%`;
+    const meter = document.createElement('progress'); meter.max = 100; meter.value = activities.length ? Math.round((executed / activities.length) * 100) : 0;
+    progressWrap.append(progressLabel, progressValue, meter);
+    const viewButton = document.createElement('button'); viewButton.className = 'community-card-action'; viewButton.type = 'button'; viewButton.textContent = 'Ver actividades →';
+    viewButton.addEventListener('click', () => { communityFilter.value = community.id; renderCommunities(); document.querySelector('.community-board-heading').scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+    card.append(cardTop, title, focus, mentor, progressWrap, meta, viewButton);
     return card;
   }));
 
@@ -763,12 +776,15 @@ function renderCommunities() {
   const evidenceCount = periodActivities.filter(hasCompleteEvidence).length;
   document.getElementById('community-registered-count').textContent = periodActivities.length;
   document.getElementById('community-executed-count').textContent = executedCount;
+  document.getElementById('community-active-members-count').textContent = periodMembers.filter((member) => ['inscrito', 'activo'].includes(member.status)).length;
   document.getElementById('community-evidence-count').textContent = `${periodActivities.length ? Math.round((evidenceCount / periodActivities.length) * 100) : 0}%`;
   renderCommunityAlerts();
 
+  const communityQuery = normalizeSearchText(communitySearch.value.trim());
   const visibleActivities = periodActivities
-    .filter((activity) => (!communityFilter.value || activity.community === communityFilter.value) && (!communityStatusFilter.value || activity.status === communityStatusFilter.value))
+    .filter((activity) => (!communityFilter.value || activity.community === communityFilter.value) && (!communityStatusFilter.value || activity.status === communityStatusFilter.value) && (!communityQuery || normalizeSearchText(`${activity.name} ${activity.responsible} ${activity.environment || ''} ${communityName(activity.community)}`).includes(communityQuery)))
     .sort((first, second) => first.date.localeCompare(second.date));
+  communityResultsCount.textContent = `${visibleActivities.length} ${visibleActivities.length === 1 ? 'actividad' : 'actividades'}`;
   communityActivitiesBody.replaceChildren();
   emptyCommunityActivities.hidden = visibleActivities.length > 0;
   emptyCommunityActivities.textContent = periodActivities.length ? 'No hay actividades que coincidan con los filtros.' : `Aún no hay actividades registradas en ${communityPeriod.value}.`;
@@ -2215,6 +2231,7 @@ communityActivityForm.addEventListener('submit', (event) => {
 
 communityFilter.addEventListener('change', renderCommunities);
 communityStatusFilter.addEventListener('change', renderCommunities);
+communitySearch.addEventListener('input', renderCommunities);
 communityPeriod.addEventListener('change', () => {
   localStorage.setItem(communityPeriodStorageKey, communityPeriod.value);
   resetCommunityActivityForm(); resetCommunityMemberForm(); renderCommunities(); renderCommunityMembers();
